@@ -1,0 +1,17 @@
+# Ignore credentials
+cloud-credentials
+*.secret
+*.key
+*.crt
+
+# Ignore system files
+*.log
+*.swp
+*.tmp
+
+# Ignore archives
+*.tar.gz
+*.tgz
+*.zip
+*.tar
+

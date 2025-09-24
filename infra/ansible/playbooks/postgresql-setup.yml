@@ -1,0 +1,42 @@
+---
+- name: Setup PostgreSQL with user and database
+  hosts: db_worker   # <== grup host dari inventory AWX
+  become: true       # <== jalankan dengan sudo
+
+  vars:
+    db_name: awxdb        # nama database yang mau dibuat
+    db_user: awxuser      # nama user postgres
+    db_password: awxpass  # password user
+
+  tasks:
+    - name: Install PostgreSQL and dependencies
+      apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+          - python3-psycopg2
+        state: present
+        update_cache: yes
+
+    - name: Ensure PostgreSQL service is running
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Ensure PostgreSQL user exists
+      community.postgresql.postgresql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        role_attr_flags: LOGIN
+        state: present
+        login_user: postgres
+        login_host: localhost
+
+    - name: Ensure database exists
+      community.postgresql.postgresql_db:
+        name: "{{ db_name }}"
+        owner: "{{ db_user }}"
+        state: present
+        login_user: postgres
+        login_host: localhost

@@ -1,0 +1,20 @@
+# inventories/dev/group_vars/Worker_DB.yml
+
+# Default user untuk koneksi SSH ke host worker
+ansible_user: worker
+ansible_password: worker123        # password login user worker (jika SSH key tidak dipakai)
+ansible_become: true               # gunakan sudo
+ansible_become_method: sudo
+ansible_become_password: worker123 # password sudo user worker
+ansible_python_interpreter: /usr/bin/python3
+
+# PostgreSQL login info
+db_name: "awxdb"          # nama database target
+login_user: "awxuser"     # user lama yang punya hak di DB
+login_password: "awxpass" # password user lama
+login_host: "192.168.217.131" # host worker DB
+
+# User baru yang mau dibuat
+new_db_user: "awxuser2"
+new_db_pass: "awxpass2"
+

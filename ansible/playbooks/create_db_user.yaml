@@ -1,0 +1,26 @@
+---
+- name: Create new PostgreSQL user
+  hosts: Worker_DB
+  become: yes
+  vars:
+    db_name: "awxdb"              # nama database
+    new_db_user: "awxuser2"       # user baru
+    new_db_pass: "awxpass2"       # password user baru
+    login_user: "awxuser"         # user lama yang punya permission
+    login_password: "awxpass"     # password user lama
+    login_host: "192.168.217.131" # host worker DB
+  tasks:
+    - name: Ensure PostgreSQL user exists
+      community.postgresql.postgresql_user:
+        name: "{{ new_db_user }}"
+        password: "{{ new_db_pass }}"
+        priv: "{{ db_name }}:ALL"
+        state: present
+        login_user: "{{ login_user }}"
+        login_password: "{{ login_password }}"
+        login_host: "{{ login_host }}"
+
+    - name: Show user created
+      debug:
+        msg: "User {{ new_db_user }} created successfully in database {{ db_name }}"
+
